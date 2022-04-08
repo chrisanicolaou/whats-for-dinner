@@ -7,13 +7,47 @@ const SelectIngredients = ({ setRecipeInfoObj }) => {
   const [newVeg2, setNewVeg2] = useState("");
   const [newCarb, setNewCarb] = useState("");
   const [newIsHot, setNewIsHot] = useState("");
+  const [hotButton, setHotButton] = useState("off");
+  const [notButton, setNotButton] = useState("off");
 
   const randomNumberGenerator = (num) => {
     return Math.floor(Math.random() * num);
   };
 
+  const validateForm = () => {
+    if (!newProtein) {
+      return "Protein";
+    } else if (!newVeg1) {
+      return "Veg";
+    } else if (!newVeg2) {
+      return "Veg";
+    } else if (!newCarb) {
+      return "Carb";
+    } else if (!newIsHot) {
+      return "IsHot";
+    } else {
+      return "";
+    }
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
+    switch (validateForm()) {
+      case "":
+        break;
+      case "Protein":
+        alert("You're missing a protein!");
+        return;
+      case "Veg":
+        alert("You're missing a vegetable!");
+        return;
+      case "Carb":
+        alert("You're missing a carb!");
+        return;
+      case "IsHot":
+        alert("You haven't entered a heat setting!");
+        return;
+    }
     setRecipeInfoObj((currRecipeObj) => {
       return {
         ...currRecipeObj,
@@ -34,6 +68,8 @@ const SelectIngredients = ({ setRecipeInfoObj }) => {
     setNewVeg2("");
     setNewCarb("");
     setNewIsHot("");
+    setHotButton("off");
+    setNotButton("off");
   };
 
   return (
@@ -77,8 +113,10 @@ const SelectIngredients = ({ setRecipeInfoObj }) => {
         type="radio"
         id="hot"
         name="isHot"
+        value={hotButton}
         onChange={(event) => {
           setNewIsHot(true);
+          setHotButton(event.target.value);
         }}
       ></input>
       <label htmlFor="not">Not</label>
@@ -86,8 +124,10 @@ const SelectIngredients = ({ setRecipeInfoObj }) => {
         type="radio"
         id="not"
         name="isHot"
+        value={notButton}
         onChange={(event) => {
           setNewIsHot(false);
+          setNotButton(event.target.value);
         }}
       ></input>
       <button>submit</button>
