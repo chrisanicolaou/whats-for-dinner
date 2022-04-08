@@ -1,14 +1,19 @@
-import { notCountryList, hotCountryList, cookMethodList } from "./library";
+import {
+  notCountryList,
+  hotCountryList,
+  cookMethodList,
+  hotSpices,
+  notSpices,
+} from "./library";
 import { useState } from "react";
 
-const SelectIngredients = ({ setRecipeInfoObj }) => {
+const SelectIngredients = ({ setRecipeInfoObj, setCookingDetailsObj }) => {
   const [newProtein, setNewProtein] = useState("");
   const [newVeg1, setNewVeg1] = useState("");
   const [newVeg2, setNewVeg2] = useState("");
   const [newCarb, setNewCarb] = useState("");
   const [newIsHot, setNewIsHot] = useState("");
-  const [hotButton, setHotButton] = useState("off");
-  const [notButton, setNotButton] = useState("off");
+  const [newCookMethod, setNewCookMethod] = useState("");
 
   const randomNumberGenerator = (num) => {
     return Math.floor(Math.random() * num);
@@ -33,7 +38,7 @@ const SelectIngredients = ({ setRecipeInfoObj }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     switch (validateForm()) {
-      case "":
+      default:
         break;
       case "Protein":
         alert("You're missing a protein!");
@@ -56,20 +61,45 @@ const SelectIngredients = ({ setRecipeInfoObj }) => {
         veg2: newVeg2,
         carb: newCarb,
         isHot: newIsHot,
-        cookMethod:
-          cookMethodList[randomNumberGenerator(cookMethodList.length)],
-        country: newIsHot
-          ? hotCountryList[randomNumberGenerator(hotCountryList.length)]
-          : notCountryList[randomNumberGenerator(notCountryList.length)],
+        cookMethod: newCookMethod,
+        country:
+          newIsHot === "true"
+            ? hotCountryList[randomNumberGenerator(hotCountryList.length)]
+            : notCountryList[randomNumberGenerator(notCountryList.length)],
       };
+    });
+    setCookingDetailsObj((currCookingDetailsObj) => {
+      switch (newCookMethod) {
+        case "Fried":
+          return {
+            ...currCookingDetailsObj,
+            cookingDish: "frying pan",
+            preheatMethod:
+              " and put a frying pan over medium heat with a little oil.",
+            spices: newIsHot === "true" ? [...hotSpices] : [...notSpices],
+          };
+        case "Boiled":
+          return {
+            ...currCookingDetailsObj,
+            cookingDish: "pan of boiling water",
+            preheatMethod: " and put a pot of water to boil.",
+            spices: newIsHot === "true" ? [...hotSpices] : [...notSpices],
+          };
+        default:
+          return {
+            ...currCookingDetailsObj,
+            cookingDish: "oven",
+            preheatMethod: ".",
+            spices: newIsHot === "true" ? [...hotSpices] : [...notSpices],
+          };
+      }
     });
     setNewProtein("");
     setNewVeg1("");
     setNewVeg2("");
     setNewCarb("");
     setNewIsHot("");
-    setHotButton("off");
-    setNotButton("off");
+    setNewCookMethod("");
   };
 
   return (
@@ -113,10 +143,13 @@ const SelectIngredients = ({ setRecipeInfoObj }) => {
         type="radio"
         id="hot"
         name="isHot"
-        value={hotButton}
+        value="true"
+        checked={newIsHot === "true"}
         onChange={(event) => {
-          setNewIsHot(true);
-          setHotButton(event.target.value);
+          setNewIsHot(event.target.value);
+          setNewCookMethod(
+            cookMethodList[randomNumberGenerator(cookMethodList.length)]
+          );
         }}
       ></input>
       <label htmlFor="not">Not</label>
@@ -124,10 +157,13 @@ const SelectIngredients = ({ setRecipeInfoObj }) => {
         type="radio"
         id="not"
         name="isHot"
-        value={notButton}
+        value="false"
+        checked={newIsHot === "false"}
         onChange={(event) => {
-          setNewIsHot(false);
-          setNotButton(event.target.value);
+          setNewIsHot(event.target.value);
+          setNewCookMethod(
+            cookMethodList[randomNumberGenerator(cookMethodList.length)]
+          );
         }}
       ></input>
       <button>submit</button>

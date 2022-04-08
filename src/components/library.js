@@ -25,3 +25,7 @@ export const hotCountryList = [
 ];
 
 export const cookMethodList = ["Fried", "Roasted", "Boiled"];
+
+export const hotSpices = ["cumin", "paprika", "chilli powder"];
+
+export const notSpices = ["salt", "pepper", "thyme"];
