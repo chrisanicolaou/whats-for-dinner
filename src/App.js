@@ -6,38 +6,25 @@ import Title from "./components/title";
 import { useState } from "react";
 
 function App() {
-  const [protein, setProtein] = useState("");
-  const [veg1, setVeg1] = useState("");
-  const [veg2, setVeg2] = useState("");
-  const [carb, setCarb] = useState("");
-  const [isHot, setIsHot] = useState(false);
-  const [country, setCountry] = useState("");
-  const [cookMethod, setCookMethod] = useState("");
-  const [picture, setPicture] = useState("");
+  const [recipeInfoObj, setRecipeInfoObj] = useState({
+    protein: "",
+    veg1: "",
+    veg2: "",
+    card: "",
+    isHot: false,
+    country: "",
+    cookMethod: "",
+    picture: "",
+  });
 
   return (
     <div className="App">
       <Title />
-      <SelectIngredients
-        protein={protein}
-        setProtein={setProtein}
-        veg1={veg1}
-        setVeg1={setVeg1}
-        veg2={veg2}
-        setVeg2={setVeg2}
-        carb={carb}
-        setCarb={setCarb}
-        isHot={isHot}
-        setIsHot={setIsHot}
-        country={country}
-        setCountry={setCountry}
-        cookMethod={cookMethod}
-        setCookMethod={setCookMethod}
-      />
+      <SelectIngredients setRecipeInfoObj={setRecipeInfoObj} />
       <RecipeDetails
-        country={country}
-        cookMethod={cookMethod}
-        protein={protein}
+        country={recipeInfoObj.country}
+        cookMethod={recipeInfoObj.cookMethod}
+        protein={recipeInfoObj.protein}
       />
       <GenerateMethod />
     </div>

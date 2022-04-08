@@ -1,87 +1,93 @@
 import { notCountryList, hotCountryList, cookMethodList } from "./library";
+import { useState } from "react";
 
-const SelectIngredients = (props) => {
-  let newProtein;
-  let newVeg1;
-  let newVeg2;
-  let newCarb;
-  let newIsHot;
+const SelectIngredients = ({ setRecipeInfoObj }) => {
+  const [newProtein, setNewProtein] = useState("");
+  const [newVeg1, setNewVeg1] = useState("");
+  const [newVeg2, setNewVeg2] = useState("");
+  const [newCarb, setNewCarb] = useState("");
+  const [newIsHot, setNewIsHot] = useState("");
 
   const randomNumberGenerator = (num) => {
-    return Math.floor(Math.random() * num + 1);
+    return Math.floor(Math.random() * num);
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    props.setProtein(newProtein);
-    props.setVeg1(newVeg1);
-    props.setVeg2(newVeg2);
-    props.setCarb(newCarb);
-    props.setIsHot(newIsHot);
-    props.setCookMethod(
-      cookMethodList[randomNumberGenerator(cookMethodList.length)]
-    );
-    props.setCountry((newIsHot) => {
-      if (newIsHot === true) {
-        return hotCountryList[randomNumberGenerator(hotCountryList.length)];
-      } else {
-        return notCountryList[randomNumberGenerator(notCountryList.length)];
-      }
+    setRecipeInfoObj((currRecipeObj) => {
+      return {
+        ...currRecipeObj,
+        protein: newProtein,
+        veg1: newVeg1,
+        veg2: newVeg2,
+        carb: newCarb,
+        isHot: newIsHot,
+        cookMethod:
+          cookMethodList[randomNumberGenerator(cookMethodList.length)],
+        country: newIsHot
+          ? hotCountryList[randomNumberGenerator(hotCountryList.length)]
+          : notCountryList[randomNumberGenerator(notCountryList.length)],
+      };
     });
+    setNewProtein("");
+    setNewVeg1("");
+    setNewVeg2("");
+    setNewCarb("");
+    setNewIsHot("");
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      <label for="protein">Protein:</label>
+      <label htmlFor="protein">Protein:</label>
       <input
         type="text"
         id="protein"
         name="protein"
         value={newProtein}
-        onChange={(event) => (newProtein = event.target.value)}
+        onChange={(event) => {
+          setNewProtein(event.target.value);
+        }}
       ></input>
-      <label for="veg1">First Vegetable:</label>
+      <label htmlFor="veg1">First Vegetable:</label>
       <input
         type="text"
         id="veg1"
         name="veg1"
         value={newVeg1}
-        onChange={(event) => (newVeg1 = event.target.value)}
+        onChange={(event) => setNewVeg1(event.target.value)}
       ></input>
-      <label for="veg2">Second Vegetable:</label>
+      <label htmlFor="veg2">Second Vegetable:</label>
       <input
         type="text"
         id="veg2"
         name="veg2"
         value={newVeg2}
-        onChange={(event) => (newVeg2 = event.target.value)}
+        onChange={(event) => setNewVeg2(event.target.value)}
       ></input>
-      <label for="carb">Carbo:</label>
+      <label htmlFor="carb">Carbo:</label>
       <input
         type="text"
         id="carb"
         name="carb"
         value={newCarb}
-        onChange={(event) => (newCarb = event.target.value)}
+        onChange={(event) => setNewCarb(event.target.value)}
       ></input>
-      <label for="hot">Hot</label>
+      <label htmlFor="hot">Hot</label>
       <input
         type="radio"
         id="hot"
         name="isHot"
-        value={newIsHot}
         onChange={(event) => {
-          newIsHot = true;
+          setNewIsHot(true);
         }}
       ></input>
-      <label for="not">Not</label>
+      <label htmlFor="not">Not</label>
       <input
         type="radio"
         id="not"
         name="isHot"
-        value={newIsHot}
         onChange={(event) => {
-          newIsHot = false;
+          setNewIsHot(false);
         }}
       ></input>
       <button>submit</button>
